@@ -2127,6 +2127,7 @@ class Trainer:
         trial: Union["optuna.Trial", dict[str, Any], None] = None,
         ignore_keys_for_eval: Optional[list[str]] = None,
     ):
+        
         """
         Main training entry point.
 
@@ -2141,6 +2142,8 @@ class Trainer:
                 A list of keys in the output of your model (if it is a dictionary) that should be ignored when
                 gathering predictions for evaluation during the training.
         """
+
+        
         if resume_from_checkpoint is False:
             resume_from_checkpoint = None
 
@@ -2205,6 +2208,7 @@ class Trainer:
                 self._move_model_to_device(self.model, args.device)
             self.model_wrapped = self.model
 
+        print("before inner_training_loop")
         inner_training_loop = find_executable_batch_size(
             self._inner_training_loop, self._train_batch_size, args.auto_find_batch_size
         )
