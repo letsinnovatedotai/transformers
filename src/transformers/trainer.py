@@ -2256,6 +2256,7 @@ class Trainer:
     def _inner_training_loop(
         self, batch_size=None, args=None, resume_from_checkpoint=None, trial=None, ignore_keys_for_eval=None
     ):
+        print("start of _inner_training_loop")
         self.accelerator.free_memory()
         self._train_batch_size = batch_size
         if self.args.auto_find_batch_size:
@@ -2404,8 +2405,9 @@ class Trainer:
         # self.model         is the Transformers Model
         # self.model_wrapped is DDP(Transformers Model), Deepspeed(Transformers Model),
         # FSDP(Transformers Model), Dynamo Optimized Module(Transformers Model) etc.
-
-        # Train!
+        
+        print("# Train!")
+        
         logger.info("***** Running training *****")
         logger.info(f"  Num examples = {num_examples:,}")
         logger.info(f"  Num Epochs = {num_train_epochs:,}")
@@ -2528,6 +2530,7 @@ class Trainer:
                             if self.args.include_num_input_tokens_seen == "non_padding":
                                 if "attention_mask" in inputs:
                                     input_tokens = inputs["attention_mask"].sum()
+                                    print("here at input_tokens", input_tokens)
                                 elif (
                                     self.processing_class is not None
                                     and hasattr(self.processing_class, "pad_token_id")
@@ -2571,6 +2574,7 @@ class Trainer:
                     ):
                         # if loss is nan or inf simply add the average of previous logged losses
                         tr_loss = tr_loss + tr_loss / (1 + self.state.global_step - self._globalstep_last_logged)
+                        print("tr_loss is ",tr_loss)
                     else:
                         if tr_loss.device != tr_loss_step.device:
                             raise ValueError(
